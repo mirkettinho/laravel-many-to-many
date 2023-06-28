@@ -36,9 +36,9 @@
 
     {{-- TIPO LINGUAGGIO --}}
   <div class="mb-3">
-    <label for="title" class="form-label">Linguaggio</label>
+    <label for="title" class="form-label">Tipo</label>
     <select class="form-select" name="type_id">
-      <option value="">Seleziona il linguaggio</option>
+      <option value="">Seleziona il tipo</option>
       @foreach ($types as $type)
       <option value="{{$type->id}}"
         @if($type->id == old("type_id")) selected @endif
@@ -47,6 +47,26 @@
       @endforeach
     </select>
   </div>
+
+
+  <div class="mb-3">
+    <p for="title" class="form-label">Linguaggio</p>
+    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+
+      @foreach ($technologies as $technology)
+
+      <input type="checkbox" class="btn-check" id="{{$technology->id}}" autocomplete="off" value="{{$technology->id}}" name="technologies[]"
+      @if (in_array($technology->id, old("technologies", [])))
+        checked
+      @endif
+      >
+      <label class="btn btn-outline-warning" for="{{$technology->id}}">{{$technology->name}}</label>
+      @endforeach
+
+    </div>
+  </div>
+
+
   {{-- 2 --}}
   <div class="mb-3">
     <label for="description" class="form-label">Descrizione</label>

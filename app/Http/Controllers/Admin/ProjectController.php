@@ -33,7 +33,8 @@ class ProjectController extends Controller
     public function create()
     {
         $types = Type::all();
-        return view("admin.projects.create", compact("types"));
+        $technologies = Technology::all();
+        return view("admin.projects.create", compact("types", "technologies"));
     }
 
     /**
@@ -60,6 +61,12 @@ class ProjectController extends Controller
         $new_project->fill($form_data);
         $new_project->save();
 
+        // SE INVIO ALMENO 1 LINGUAGGIO
+        if(array_key_exists("technologies", $form_data)){
+          // ATTACCO AL PROGETTO APPENA CREATO L-ARRAY DELLE TECNOLOGIE
+          $new_project->technologies()->attach($form_data["technologies"]);
+        }
+
         return redirect()->route("admin.projects.show", $new_project);
     }
 
@@ -83,7 +90,8 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
       $types = Type::all();
-      return view("admin.projects.edit", compact("project", "types"));
+      $technologies = Technology::all();
+      return view("admin.projects.edit", compact("project", "types", "technologies"));
     }
 
     /**
@@ -121,6 +129,14 @@ class ProjectController extends Controller
 
         $project->update($form_data);
 
+        if(array_key_exists("technologies", $form_data)){
+            // se esiste la chiave, sincronizzo
+            $project->technologies()->sync($form_data["technologies"]);
+        }else{
+          // se non ci sono tecnologie, elimino le relazioni
+          $project->technologies()->detach();
+        }
+
         return redirect()->route("admin.projects.show", $project);
     }
 
@@ -132,6 +148,10 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+
+      // visto che nella migration ho cascadeOnDelete non devo fare l eliminazione manuale ----------
+
+      // altrimenti  $project->technologies()->detach();
 
       if($project->image_path){
         Storage::disk("public")->delete($project->image_path);

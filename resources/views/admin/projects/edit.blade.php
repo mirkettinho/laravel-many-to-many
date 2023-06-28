@@ -32,19 +32,19 @@
     id="title"
     name="title"
     placeholder="inserisci il titolo"
-    value="{{old("title")}}"
+    value="{{old("title", $project->title)}}"
     >
     @error("title") <p class="text-danger">{{$message}}</p> @enderror
   </div>
   {{-- 2 --}}
   <div class="mb-3">
-    <label for="title" class="form-label">Linguaggio</label>
+    <label for="title" class="form-label">Tipo</label>
     <select class="form-select" name="type_id">
-      <option value="">Seleziona il linguaggio</option>
+      <option value="">Seleziona il tipo</option>
 
       @foreach ($types as $type)
       <option value="{{$type->id}}"
-        @if($project->type->id == old("type_id", $project->type?->id)) selected @endif
+        @if($type->id == old("type_id", $project->type?->id)) selected @endif
         >{{$type->name}}</option>
 
       @endforeach
@@ -52,10 +52,34 @@
     </select>
   </div>
 
+
+
+
+  <div class="mb-3">
+    <p for="title" class="form-label">Linguaggio</p>
+    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+
+      @foreach ($technologies as $technology)
+
+      <input type="checkbox" class="btn-check" id="{{$technology->id}}" autocomplete="off" value="{{$technology->id}}" name="technologies[]"
+      @if (!$errors->any() && $project?->technologies->contains($technology))
+        checked
+      @elseif($errors->any() && in_array($technology->id, old("technologies", [])))
+        checked
+      @endif
+      >
+      <label class="btn btn-outline-warning" for="{{$technology->id}}">{{$technology->name}}</label>
+      @endforeach
+
+    </div>
+  </div>
+
+
+
   <div class="mb-3">
     <label for="description" class="form-label">Descrizione</label>
     <input type="text-area" class="form-control" id="description" name="description" placeholder="inserisci la descrizione"
-    value="{{old("description")}}"
+    value="{{old("description", $project->description)}}"
     >
   </div>
 
@@ -77,7 +101,7 @@
     id="end_date"
     name="end_date"
     placeholder="inserisci la data di consegna"
-    value="{{old("end_date")}}"
+    value="{{old("end_date", $project->end_date)}}"
     >
   </div>
 
