@@ -17,9 +17,9 @@ class TypeTableSeeder extends Seeder
      */
     public function run()
     {
-        $lang = ["HTML", "CSS", "JAVASCRIPT", "PHP"];
+        $data = ["Front-End", "Back-End", "Design", "UX"];
 
-        foreach($lang as $type){
+        foreach($data as $type){
           $new_type = new Type();
           $new_type->name = $type;
           $new_type->slug = Str::slug($type, "-");

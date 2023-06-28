@@ -21,6 +21,7 @@
       <th scope="col">Titolo</th>
       <th scope="col">Slug</th>
       <th scope="col">Descrizione</th>
+      <th scope="col">Tipo</th>
       <th scope="col">Linguaggio</th>
       <th scope="col">Data Consegna</th>
       <th scope="col">Azioni</th>
@@ -35,6 +36,14 @@
       <td>{{$project->slug}}</td>
       <td>{{$project->description}}</td>
       <td><span class="badge text-bg-primary">{{$project->type?->name}}</span></td>
+      <td>
+        @forelse ($project->technologies as $technology )
+
+        <span class="badge text-bg-warning">{{$technology->name}}</span>
+        @empty
+        <span>Nessuna informazione sulla tecnologia utilizzata</span>
+        @endforelse
+      </td>
       <td>{{$project->end_date}}</td>
       <td>
         <a class="bg-primary text-white" href="{{route("admin.projects.show", $project)}}"></i>show</a>
